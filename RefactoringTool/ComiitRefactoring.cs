@@ -10,9 +10,9 @@ using System.Windows.Forms;
 
 namespace RefactoringTool
 {
-    public partial class Form1 : Form
+    public partial class ComiitRefactoring : Form
     {
-        public Form1()
+        public ComiitRefactoring()
         {
             InitializeComponent();
         }
