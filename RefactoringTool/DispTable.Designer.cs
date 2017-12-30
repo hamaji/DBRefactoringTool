@@ -52,7 +52,9 @@
             this.treeView1.Name = "treeView1";
             this.treeView1.Size = new System.Drawing.Size(166, 374);
             this.treeView1.TabIndex = 4;
+            this.treeView1.BeforeExpand += new System.Windows.Forms.TreeViewCancelEventHandler(this.treeView1_BeforeExpand);
             this.treeView1.AfterSelect += new System.Windows.Forms.TreeViewEventHandler(this.treeView1_AfterSelect);
+            this.treeView1.NodeMouseClick += new System.Windows.Forms.TreeNodeMouseClickEventHandler(this.treeView1_NodeMouseClick);
             // 
             // ListTable
             // 

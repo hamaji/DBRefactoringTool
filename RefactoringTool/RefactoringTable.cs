@@ -167,41 +167,41 @@ namespace RefactoringTool
             //    NumericVector smoothed = response["y"].AsNumeric();
             //}
             int i = 0;
-            using (REngine engine = REngine.CreateInstance("RDotNet"))
-            {
-                engine.Initialize();
+            //using (REngine engine = REngine.CreateInstance("RDotNet"))
+            //{
+            //    engine.Initialize();
 
-                engine.Evaluate("setwd('c:/work')");
-                engine.Evaluate("getwd()").AsCharacter();
-                engine.Evaluate("y <- read.csv('datasnull.csv')");
-                engine.Evaluate("y").AsCharacter();
-                engine.Evaluate("km =kmeans(y,2)");
-                CharacterVector text = engine.Evaluate("km$cluster").AsCharacter();
+            //    engine.Evaluate("setwd('c:/work')");
+            //    engine.Evaluate("getwd()").AsCharacter();
+            //    engine.Evaluate("y <- read.csv('datasnull.csv')");
+            //    engine.Evaluate("y").AsCharacter();
+            //    engine.Evaluate("km =kmeans(y,2)");
+            //    CharacterVector text = engine.Evaluate("km$cluster").AsCharacter();
 
-                CharacterVector table = engine.Evaluate("table(km$cluster)").AsCharacter();
+            //    CharacterVector table = engine.Evaluate("table(km$cluster)").AsCharacter();
 
-                string mins;
-                if (int.Parse(table[0]) < int.Parse(table[1]))
-                {
-                    mins = "1";
-                }
-                else
-                {
-                    mins = "2";
-                }
-                foreach (string t in text)
-                {
-                    i++;
-                    //richTextBox2.Text += i + "列目　" + t + "\n";
+            //    string mins;
+            //    if (int.Parse(table[0]) < int.Parse(table[1]))
+            //    {
+            //        mins = "1";
+            //    }
+            //    else
+            //    {
+            //        mins = "2";
+            //    }
+            //    foreach (string t in text)
+            //    {
+            //        i++;
+            //        //richTextBox2.Text += i + "列目　" + t + "\n";
 
-                    if (t == mins)
-                    {
-                        dataGridView1.Rows[i].DefaultCellStyle.ForeColor = Color.Red;
-                    }
-                }
-                //CharacterVector table = engine.Evaluate("table(km$cluster)").AsCharacter();
-                //richTextBox2.Text += "クラスタ1  " + table[0] + " クラスタ2　" + table[1] + "\n";
-            }
+            //        if (t == mins)
+            //        {
+            //            dataGridView1.Rows[i].DefaultCellStyle.ForeColor = Color.Red;
+            //        }
+            //    }
+            //    //CharacterVector table = engine.Evaluate("table(km$cluster)").AsCharacter();
+            //    //richTextBox2.Text += "クラスタ1  " + table[0] + " クラスタ2　" + table[1] + "\n";
+            //}
             return null;
         }
 
