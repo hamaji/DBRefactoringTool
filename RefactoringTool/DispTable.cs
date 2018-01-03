@@ -179,5 +179,11 @@ namespace RefactoringTool
             }
 
         }
+
+        private void button1_Click_1(object sender, EventArgs e)
+        {
+            RecommendUI frm = new RecommendUI("社員");
+            frm.Show();
+        }
     }
 }

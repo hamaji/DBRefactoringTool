@@ -33,6 +33,7 @@
             this.ListTable = new System.Windows.Forms.DataGridView();
             this.label1 = new System.Windows.Forms.Label();
             this.btnMoveColumn = new System.Windows.Forms.Button();
+            this.button1 = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.ListTable)).BeginInit();
             this.SuspendLayout();
             // 
@@ -84,11 +85,22 @@
             this.btnMoveColumn.UseVisualStyleBackColor = true;
             this.btnMoveColumn.Click += new System.EventHandler(this.btnMoveColumn_Click);
             // 
+            // button1
+            // 
+            this.button1.Location = new System.Drawing.Point(362, 415);
+            this.button1.Name = "button1";
+            this.button1.Size = new System.Drawing.Size(75, 23);
+            this.button1.TabIndex = 8;
+            this.button1.Text = "sample";
+            this.button1.UseVisualStyleBackColor = true;
+            this.button1.Click += new System.EventHandler(this.button1_Click_1);
+            // 
             // DispTable
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(689, 450);
+            this.Controls.Add(this.button1);
             this.Controls.Add(this.btnMoveColumn);
             this.Controls.Add(this.label1);
             this.Controls.Add(this.ListTable);
@@ -110,6 +122,7 @@
         private System.Windows.Forms.DataGridView ListTable;
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.Button btnMoveColumn;
+        private System.Windows.Forms.Button button1;
     }
 }
 

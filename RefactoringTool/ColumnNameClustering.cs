@@ -26,27 +26,27 @@ namespace RefactoringTool
             InitializeComponent();
         }
 
-        private void button1_Click(object sender, EventArgs e)
-        {
-            //スキーマ取得
-            SqlConnection con
-            = new SqlConnection();
-            con.ConnectionString = "Data Source=HK-HP\\SQLEXPRESS;Initial Catalog=testDB;Integrated Security=True"; //接続情報を入れる
-            con.Open();
+        //private void button1_Click(object sender, EventArgs e)
+        //{
+        //    //スキーマ取得
+        //    SqlConnection con
+        //    = new SqlConnection();
+        //    con.ConnectionString = "Data Source=HK-HP\\SQLEXPRESS;Initial Catalog=testDB;Integrated Security=True"; //接続情報を入れる
+        //    con.Open();
 
-            DataTable dt = con.GetSchema("Tables");
+        //    DataTable dt = con.GetSchema("Tables");
 
-            var dtColumns = con.GetSchema("Columns");
-
-
-            String[] str = { null, null, "listings_in_Amsterdam" };
-            var sColumns = con.GetSchema("Columns", str);
-            var dview = new DataView(sColumns);
-            dataGridView1.DataSource = dview;
+        //    var dtColumns = con.GetSchema("Columns");
 
 
-            con.Close();
-        }
+        //    String[] str = { null, null, "listings_in_Amsterdam" };
+        //    var sColumns = con.GetSchema("Columns", str);
+        //    var dview = new DataView(sColumns);
+        //    dataGridView1.DataSource = dview;
+
+
+        //    con.Close();
+        //}
 
         private void ColumnNameClustering_Load(object sender, EventArgs e)
         {
@@ -417,17 +417,6 @@ namespace RefactoringTool
                 field.EndsWith(" ") ||
                 field.EndsWith("\t");
         }
-
         
-
-        private void dataGridView1_CellContentDoubleClick(object sender, DataGridViewCellEventArgs e)
-        {
-            //dsgrid2.Rows.Add(dataGridView1., "");
-        }
-
-        private void tabPage1_Click(object sender, EventArgs e)
-        {
-
-        }
     }
 }
