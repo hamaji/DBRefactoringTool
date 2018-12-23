@@ -15,6 +15,7 @@ namespace RefactoringTool
 {
     public partial class テーブル分析 : Form
     {
+        public string constr = "Data Source=NOTEMAIN\\SQLEXPRESS;Initial Catalog=testDB;Integrated Security=True"; //接続情報を入れる;
         private string url = "https://api.apitore.com/api/8/word2vec-neologd-jawiki/similarity?access_token=b15f2e8b-8986-46cb-8c73-36e76a483c51&word1=%E4%BC%9A%E7%A4%BE&word2=%E4%BA%88%E7%AE%97";
         private string tablename;
         private int colCnt;
@@ -53,7 +54,7 @@ namespace RefactoringTool
             //スキーマ取得
             SqlConnection con
             = new SqlConnection();
-            con.ConnectionString = "Data Source=DESKTOP-3G3RB41\\SQLEXPRESS;Initial Catalog=testDB;Integrated Security=True"; //接続情報を入れる
+            con.ConnectionString = constr; //接続情報を入れる
             con.Open();
 
             //クエリーの生成
@@ -135,7 +136,7 @@ namespace RefactoringTool
             dsgrid2.Columns.Add("距離", typeof(string));
             //dataGridView2.DataSource = dsgrid2;
 
-            //webBrowser1.Document.InvokeScript(string, object[]);
+            webBrowser1.Navigate("D:\\work\\test2.html");
         }
 
 
@@ -198,7 +199,7 @@ namespace RefactoringTool
             //CSV作成
             SqlConnection con
             = new SqlConnection();
-            con.ConnectionString = "Data Source=DESKTOP-3G3RB41\\SQLEXPRESS;Initial Catalog=testDB;Integrated Security=True"; //接続情報を入れる
+            con.ConnectionString = constr; //接続情報を入れる
             con.Open();
 
             //クエリーの生成

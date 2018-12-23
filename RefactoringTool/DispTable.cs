@@ -13,7 +13,7 @@ namespace RefactoringTool
 {
     public partial class DispTable : Form
     {
-        public string constr = "Data Source=HK-HP\\SQLEXPRESS;Initial Catalog=testDB;Integrated Security=True"; //接続情報を入れる;
+        public string constr = "Data Source=NOTEMAIN\\SQLEXPRESS;Initial Catalog=testDB;Integrated Security=True"; //接続情報を入れる;
         private string tablename;
         public DispTable()
         {
@@ -124,7 +124,7 @@ namespace RefactoringTool
             {
                 tablename = e.Node.Text;
                 System.Data.SqlClient.SqlConnection con = new System.Data.SqlClient.SqlConnection();
-                con.ConnectionString = "Data Source=DESKTOP-3G3RB41\\SQLEXPRESS;Initial Catalog=testDB;Integrated Security=True"; //接続情報を入れる
+                con.ConnectionString = constr; //接続情報を入れる
                 con.Open();
                 //クエリーの生成
                 SqlCommand sqlCom = new SqlCommand();
@@ -159,7 +159,7 @@ namespace RefactoringTool
                 //e.Node.Nodes.Add(treeNodeNew);
 
                 System.Data.SqlClient.SqlConnection con = new System.Data.SqlClient.SqlConnection();
-                con.ConnectionString = "Data Source=DESKTOP-3G3RB41\\SQLEXPRESS;Initial Catalog=testDB;Integrated Security=True"; //接続情報を入れる
+                con.ConnectionString = constr; //接続情報を入れる
                 con.Open();
 
                 DataTable dt = con.GetSchema("Tables");

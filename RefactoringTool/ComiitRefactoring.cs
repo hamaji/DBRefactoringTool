@@ -15,6 +15,7 @@ namespace RefactoringTool
         public ComiitRefactoring()
         {
             InitializeComponent();
+
         }
     }
 }

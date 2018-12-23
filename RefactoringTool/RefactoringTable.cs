@@ -14,6 +14,7 @@ namespace RefactoringTool
 {
     public partial class RefactoringTable : Form
     {
+        public string constr = "Data Source=NOTEMAIN\\SQLEXPRESS;Initial Catalog=testDB;Integrated Security=True"; //接続情報を入れる;
         private string[] argumentValues; //Form1から受け取った引数
         public string ReturnValue;       //Form1に返す戻り値
 
@@ -88,7 +89,7 @@ namespace RefactoringTool
             //スキーマ取得
             SqlConnection con
             = new SqlConnection();
-            con.ConnectionString = "Data Source=HK-HP\\SQLEXPRESS;Initial Catalog=testDB;Integrated Security=True"; //接続情報を入れる
+            con.ConnectionString = constr; //接続情報を入れる
             con.Open();
 
             //クエリーの生成
