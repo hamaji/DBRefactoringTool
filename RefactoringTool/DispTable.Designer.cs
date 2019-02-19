@@ -28,30 +28,19 @@
         /// </summary>
         private void InitializeComponent()
         {
-            this.btnDispTable = new System.Windows.Forms.Button();
             this.treeView1 = new System.Windows.Forms.TreeView();
             this.ListTable = new System.Windows.Forms.DataGridView();
             this.label1 = new System.Windows.Forms.Label();
             this.btnMoveColumn = new System.Windows.Forms.Button();
-            this.button1 = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.ListTable)).BeginInit();
             this.SuspendLayout();
             // 
-            // btnDispTable
-            // 
-            this.btnDispTable.Location = new System.Drawing.Point(23, 12);
-            this.btnDispTable.Name = "btnDispTable";
-            this.btnDispTable.Size = new System.Drawing.Size(75, 23);
-            this.btnDispTable.TabIndex = 0;
-            this.btnDispTable.Text = "データベース選択";
-            this.btnDispTable.UseVisualStyleBackColor = true;
-            this.btnDispTable.Click += new System.EventHandler(this.btnDispTable_Click);
-            // 
             // treeView1
             // 
-            this.treeView1.Location = new System.Drawing.Point(12, 50);
+            this.treeView1.Location = new System.Drawing.Point(26, 100);
+            this.treeView1.Margin = new System.Windows.Forms.Padding(7, 6, 7, 6);
             this.treeView1.Name = "treeView1";
-            this.treeView1.Size = new System.Drawing.Size(166, 374);
+            this.treeView1.Size = new System.Drawing.Size(355, 744);
             this.treeView1.TabIndex = 4;
             this.treeView1.BeforeExpand += new System.Windows.Forms.TreeViewCancelEventHandler(this.treeView1_BeforeExpand);
             this.treeView1.AfterSelect += new System.Windows.Forms.TreeViewEventHandler(this.treeView1_AfterSelect);
@@ -60,52 +49,44 @@
             // ListTable
             // 
             this.ListTable.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            this.ListTable.Location = new System.Drawing.Point(225, 52);
+            this.ListTable.Location = new System.Drawing.Point(488, 104);
+            this.ListTable.Margin = new System.Windows.Forms.Padding(7, 6, 7, 6);
             this.ListTable.Name = "ListTable";
             this.ListTable.RowTemplate.Height = 21;
-            this.ListTable.Size = new System.Drawing.Size(437, 363);
+            this.ListTable.Size = new System.Drawing.Size(947, 726);
             this.ListTable.TabIndex = 5;
             // 
             // label1
             // 
             this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(231, 21);
+            this.label1.Location = new System.Drawing.Point(22, 50);
+            this.label1.Margin = new System.Windows.Forms.Padding(7, 0, 7, 0);
             this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(67, 12);
+            this.label1.Size = new System.Drawing.Size(134, 24);
             this.label1.TabIndex = 6;
             this.label1.Text = "テーブル一覧";
             // 
             // btnMoveColumn
             // 
-            this.btnMoveColumn.Location = new System.Drawing.Point(507, 415);
+            this.btnMoveColumn.Location = new System.Drawing.Point(1099, 830);
+            this.btnMoveColumn.Margin = new System.Windows.Forms.Padding(7, 6, 7, 6);
             this.btnMoveColumn.Name = "btnMoveColumn";
-            this.btnMoveColumn.Size = new System.Drawing.Size(155, 23);
+            this.btnMoveColumn.Size = new System.Drawing.Size(336, 46);
             this.btnMoveColumn.TabIndex = 7;
             this.btnMoveColumn.Text = "テーブル分析";
             this.btnMoveColumn.UseVisualStyleBackColor = true;
             this.btnMoveColumn.Click += new System.EventHandler(this.btnMoveColumn_Click);
             // 
-            // button1
-            // 
-            this.button1.Location = new System.Drawing.Point(362, 415);
-            this.button1.Name = "button1";
-            this.button1.Size = new System.Drawing.Size(75, 23);
-            this.button1.TabIndex = 8;
-            this.button1.Text = "sample";
-            this.button1.UseVisualStyleBackColor = true;
-            this.button1.Click += new System.EventHandler(this.button1_Click_1);
-            // 
             // DispTable
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
+            this.AutoScaleDimensions = new System.Drawing.SizeF(13F, 24F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(689, 450);
-            this.Controls.Add(this.button1);
+            this.ClientSize = new System.Drawing.Size(1493, 900);
             this.Controls.Add(this.btnMoveColumn);
             this.Controls.Add(this.label1);
             this.Controls.Add(this.ListTable);
             this.Controls.Add(this.treeView1);
-            this.Controls.Add(this.btnDispTable);
+            this.Margin = new System.Windows.Forms.Padding(7, 6, 7, 6);
             this.Name = "DispTable";
             this.Text = "RefactoringTool";
             this.Load += new System.EventHandler(this.DispTable_Load);
@@ -116,13 +97,10 @@
         }
 
         #endregion
-
-        private System.Windows.Forms.Button btnDispTable;
         private System.Windows.Forms.TreeView treeView1;
         private System.Windows.Forms.DataGridView ListTable;
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.Button btnMoveColumn;
-        private System.Windows.Forms.Button button1;
     }
 }
 

@@ -13,7 +13,7 @@ namespace RefactoringTool
 {
     public partial class RecommendUI : Form
     {
-        public string constr = "Data Source=NOTEMAIN\\SQLEXPRESS;Initial Catalog=testDB;Integrated Security=True"; //接続情報を入れる;
+        //public string constr = "Data Source=DESKTOP-FL8Q3DU;Initial Catalog=testDB;Integrated Security=True"; //接続情報を入れる;
         private string tablename;
         private int colCnt;
         private List<string> colNsmeList;
@@ -29,7 +29,7 @@ namespace RefactoringTool
 
             SqlConnection con
             = new SqlConnection();
-            con.ConnectionString = constr; //接続情報を入れる
+            con.ConnectionString = RefactoringTable.constr; //接続情報を入れる
             con.Open();
 
             //クエリーの生成
