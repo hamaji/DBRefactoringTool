@@ -25,96 +25,38 @@ namespace RefactoringTool
             tablename = name;
             InitializeComponent();
         }
-        
+
 
         private void ColumnNameClustering_Load(object sender, EventArgs e)
         {
-            //スキーマ取得
+            lblTableName.Text = tablename;
+
+            //コネクション取得
             SqlConnection con
-            = new SqlConnection();
-            con.ConnectionString = RefactoringTable.constr; //接続情報を入れる
+            = new SqlConnection(DispTable.constr);
             con.Open();
 
-            //クエリーの生成
-            SqlCommand sqlCom = new SqlCommand();
+            //スキーマ表示
+            dispTableSchema(con);
 
-            //クエリー送信先及びトランザクションの指定
-            sqlCom.Connection = con;
-            
-            //クエリー文の指定
-            sqlCom.CommandText = "SELECT * FROM "+tablename+";";
+            dispTableColumn(con);
 
-            //データテーブルを作成するためのアダプタ
-            SqlDataAdapter sqlAda = new SqlDataAdapter();
-            sqlAda.SelectCommand = sqlCom;
+            dispColumn_Column(con);
 
-            DataTable dsgrid = new DataTable();
-            dsgrid.Columns.Add("Column", typeof(string));
-            dsgrid.Columns.Add("word2vec距離", typeof(string));
-            //dsにテーブルデータを代入
-            DataTable ds = new DataTable();
-            sqlAda.Fill(ds);
-            colCnt = ds.Columns.Count;
-            colNsmeList = new List<string>();
-            //List<String> columnList = new List<string>();
-            foreach (DataColumn clm in ds.Columns)
-            {
-                //columnList.Add(clm.ColumnName);
-                //var sim =getSimilarity(tablename, clm.ColumnName);
-                var sim = "0";
-                string[] row = new string[] { clm.ColumnName, sim };
-                dsgrid.Rows.Add(row);
-                colNsmeList.Add(clm.ColumnName);
-            }
-            //dsgrid.Rows[10]["word2vec距離"] = "0.1";
-
-            dataGridView1.DataSource = dsgrid;
-            //dataGridView1.Rows[15].DefaultCellStyle.BackColor = Color.Yellow;
-
-
-            //カラム間距離
-            DataTable dsgridbetCol = new DataTable();
-            List<string> colnameList = new List<string>();
-            foreach (DataColumn clm in ds.Columns)
-            {
-                dsgridbetCol.Columns.Add(clm.ColumnName, typeof(string));
-                //var sim = getSimilarity(tablename, clm.ColumnName);
-                
-                colnameList.Add(clm.ColumnName);
-                //dsgridbetCol.Rows.Add(row);
-            }
-
-            foreach (DataColumn clm in ds.Columns)
-            {
-                List<string> row = new List<string>();
-                foreach (string colname in colnameList)
-                {
-                    if(colname == clm.ColumnName)
-                    {
-                        row.Add("1.0");
-                        continue;
-                    }
-                    //string sim = "0";
-                    //var sim = getSimilarity(colname, clm.ColumnName);
-                    var sim = "0";
-                    row.Add(sim);
-                    
-                }
-                var str = row.ToArray();
-                dsgridbetCol.Rows.Add(str);
-            }
             //string[] row2 = new string[] { "0", "1" };
             //dsgridbetCol.Rows.Add(row2);
             //dsgridColdis.DataSource = dsgridbetCol;
 
             //Nullclustering();
-            dsgrid2 = new DataTable();
-            dsgrid2.Columns.Add("移行Column", typeof(string));
-            dsgrid2.Columns.Add("距離", typeof(string));
+            //dsgrid2 = new DataTable();
+            //dsgrid2.Columns.Add("移行Column", typeof(string));
+            //dsgrid2.Columns.Add("距離", typeof(string));
             //dataGridView2.DataSource = dsgrid2;
 
-            webBrowser1.Navigate("D:\\work\\d3jsforce2.html");
-            webBrowser2.Navigate("D:\\work\\d3jsforce2.html");
+            webBrowser1.Navigate("D:\\work\\RefGraph\\d3jsforcetable_Colmun.html");
+            webBrowser2.Navigate("D:\\work\\RefGraph\\d3jsforcesColumn_Column.html");
+            webBrowser3.Navigate("D:\\work\\RefGraph\\d3jsforcetable_Colmun_Merge.html");
+            //webBrowser2.Navigate("D:\\work\\d3jsforce2.html");
         }
 
 
@@ -142,7 +84,7 @@ namespace RefactoringTool
 
         public string getSimilarity(string word1, string word2)
         {
-            String url = ENDPOINT + "?access_token=" + ACCESS_TOKEN + "&word1="+word1+"&word2=" + word2;
+            String url = ENDPOINT + "?access_token=" + ACCESS_TOKEN + "&word1=" + word1 + "&word2=" + word2;
             //params.put("word1", "ポメラニアン");
             //params.put("word2", "ゴールデンレトリバー");
             //String url = UrlFormatter.format(ENDPOINT, params);
@@ -177,7 +119,7 @@ namespace RefactoringTool
             //CSV作成
             SqlConnection con
             = new SqlConnection();
-            con.ConnectionString = RefactoringTable.constr; //接続情報を入れる
+            con.ConnectionString = DispTable.constr; //接続情報を入れる
             con.Open();
 
             //クエリーの生成
@@ -201,7 +143,7 @@ namespace RefactoringTool
 
             DataTable dsNull = new DataTable();
             sqlAda.Fill(dsNull);
-            dataGridNULLCluster.DataSource = dsNull;
+            //dataGridNULLCluster.DataSource = dsNull;
 
             //ConvertDataTableToCsv(dsNull, "c:/work/datasnull.csv", true);
             //Rの前準備
@@ -249,20 +191,20 @@ namespace RefactoringTool
             }
             foreach (string t in text)
             {
-                richTextBox1.Text += colNsmeList[i] + "　" + t + " ";
+                //richTextBox1.Text += colNsmeList[i] + "　" + t + " ";
 
                 if (t == mins)
                 {
-                    dataGridNULLCluster.Columns[i].DefaultCellStyle.ForeColor = Color.Red;
+                    //dataGridNULLCluster.Columns[i].DefaultCellStyle.ForeColor = Color.Red;
                 }
                 i++;
             }
             CharacterVector ret = engine.Evaluate("table(km$cluster)").AsCharacter();
-            richTextBox1.Text += "\nクラスタ1  要素数　" + table[0] + " クラスタ2　要素数" + table[1] + "\n";
+            //richTextBox1.Text += "\nクラスタ1  要素数　" + table[0] + " クラスタ2　要素数" + table[1] + "\n";
             engine.Dispose();
             return null;
         }
-        
+
 
 
         [DataContract]
@@ -396,6 +338,59 @@ namespace RefactoringTool
                 field.EndsWith(" ") ||
                 field.EndsWith("\t");
         }
-        
+
+
+        private void dispTableSchema(SqlConnection con)
+        {
+            // データアダプタオブジェクトの作成
+            var adapter = new SqlDataAdapter("SELECT COLUMN_NAME ,  DATA_TYPE FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_NAME = '" + tablename + "' ORDER BY TABLE_NAME, ORDINAL_POSITION", con);
+
+            // データセットオブジェクトの作成
+            var dsSchema = new DataSet();
+
+            // 抽出したデータをデータセットに格納
+            adapter.Fill(dsSchema);
+
+            // DataGridViewのデータソースにデータセットのテーブルをバインド
+            this.dgTableSchema.DataSource = dsSchema.Tables[0];
+
+        }
+
+        private void dispTableColumn(SqlConnection con)
+        {
+            // データアダプタオブジェクトの作成
+            var adapter = new SqlDataAdapter("SELECT *  FROM テーブルカラム名距離", con);
+
+            // データセットオブジェクトの作成
+            var dsSchema = new DataSet();
+
+            // 抽出したデータをデータセットに格納
+            adapter.Fill(dsSchema);
+
+            // DataGridViewのデータソースにデータセットのテーブルをバインド
+            this.dgTableColumn.DataSource = dsSchema.Tables[0];
+
+        }
+
+        private void dispColumn_Column(SqlConnection con)
+        {
+            // データアダプタオブジェクトの作成
+            var adapter = new SqlDataAdapter("SELECT *  FROM カラム間距離", con);
+
+            // データセットオブジェクトの作成
+            var dsSchema = new DataSet();
+
+            // 抽出したデータをデータセットに格納
+            adapter.Fill(dsSchema);
+
+            // DataGridViewのデータソースにデータセットのテーブルをバインド
+            this.dgColumn_Column.DataSource = dsSchema.Tables[0];
+
+        }
+
+        private void btnInit_Click(object sender, EventArgs e)
+        {
+
+        }
     }
 }

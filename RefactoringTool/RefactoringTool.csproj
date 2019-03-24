@@ -76,17 +76,11 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="ColumnNameClustering.cs">
+    <Compile Include="analyzeTable.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="ColumnNameClustering.Designer.cs">
-      <DependentUpon>ColumnNameClustering.cs</DependentUpon>
-    </Compile>
-    <Compile Include="ComiitRefactoring.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="ComiitRefactoring.Designer.cs">
-      <DependentUpon>ComiitRefactoring.cs</DependentUpon>
+    <Compile Include="analyzeTable.Designer.cs">
+      <DependentUpon>analyzeTable.cs</DependentUpon>
     </Compile>
     <Compile Include="DispTable.cs">
       <SubType>Form</SubType>
@@ -96,23 +90,8 @@
     </Compile>
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="RecommendUI.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="RecommendUI.Designer.cs">
-      <DependentUpon>RecommendUI.cs</DependentUpon>
-    </Compile>
-    <Compile Include="RefactoringTable.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="RefactoringTable.Designer.cs">
-      <DependentUpon>RefactoringTable.cs</DependentUpon>
-    </Compile>
-    <EmbeddedResource Include="ColumnNameClustering.resx">
-      <DependentUpon>ColumnNameClustering.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="ComiitRefactoring.resx">
-      <DependentUpon>ComiitRefactoring.cs</DependentUpon>
+    <EmbeddedResource Include="analyzeTable.resx">
+      <DependentUpon>analyzeTable.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="DispTable.resx">
       <DependentUpon>DispTable.cs</DependentUpon>
@@ -126,12 +105,6 @@
       <AutoGen>True</AutoGen>
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
-    <EmbeddedResource Include="RecommendUI.resx">
-      <DependentUpon>RecommendUI.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="RefactoringTable.resx">
-      <DependentUpon>RefactoringTable.cs</DependentUpon>
-    </EmbeddedResource>
     <None Include="packages.config" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>

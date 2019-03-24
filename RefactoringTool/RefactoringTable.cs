@@ -1,20 +1,15 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel;
 using System.Data;
-using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows.Forms;
 using System.Data.SqlClient;
-using RDotNet;
+using System.Drawing;
+using System.Windows.Forms;
 
 namespace RefactoringTool
 {
     public partial class RefactoringTable : Form
     {
-        public static string constr = "Data Source=localhost;Initial Catalog=testDB;Integrated Security=True"; //接続情報を入れる;
+        //public static string constr = "Data Source=localhost;Initial Catalog=testDB;Integrated Security=True"; //接続情報を入れる;
         private string[] argumentValues; //Form1から受け取った引数
         public string ReturnValue;       //Form1に返す戻り値
 
@@ -89,7 +84,7 @@ namespace RefactoringTool
             //スキーマ取得
             SqlConnection con
             = new SqlConnection();
-            con.ConnectionString = constr; //接続情報を入れる
+            con.ConnectionString = DispTable.constr; //接続情報を入れる
             con.Open();
 
             //クエリーの生成

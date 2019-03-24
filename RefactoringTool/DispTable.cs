@@ -13,6 +13,7 @@ namespace RefactoringTool
 {
     public partial class DispTable : Form
     {
+        public static string constr = "Data Source=localhost;Initial Catalog=testDB;Integrated Security=True;Connection Timeout=30"; //接続情報を入れる;
         private string tablename;
         public DispTable()
         {
@@ -27,7 +28,7 @@ namespace RefactoringTool
             string sendText = (string)ListTable.CurrentCell.Value;
 
             //Form2から送られてきたテキストを受け取る。
-            string receiveText = RefactoringTable.ShowMiniForm(sendText);　//Form2を開く
+            //string receiveText = RefactoringTable.ShowMiniForm(sendText);　//Form2を開く
 
         }
 
@@ -66,7 +67,7 @@ namespace RefactoringTool
             //スキーマ取得
             System.Data.SqlClient.SqlConnection con
             = new System.Data.SqlClient.SqlConnection();
-            con.ConnectionString = RefactoringTable.constr; //接続情報を入れる
+            con.ConnectionString = constr; //接続情報を入れる
             con.Open();
 
 
@@ -112,7 +113,7 @@ namespace RefactoringTool
 
         private void button1_Click(object sender, EventArgs e)
         {
-            テーブル分析 frm = new テーブル分析("社員");
+            テーブル分析 frm = new テーブル分析(tablename);
             frm.Show();
         }
 
@@ -122,7 +123,7 @@ namespace RefactoringTool
             if (e.Node.Level == 3)
             {
                 tablename = e.Node.Text;
-                SqlConnection con = new SqlConnection(RefactoringTable.constr);
+                SqlConnection con = new SqlConnection(DispTable.constr);
                 //con.ConnectionString = RefactoringTable.constr; //接続情報を入れる
                 con.Open();
                 //クエリーの生成
@@ -157,7 +158,7 @@ namespace RefactoringTool
 
                 //e.Node.Nodes.Add(treeNodeNew);
 
-                SqlConnection con = new SqlConnection(RefactoringTable.constr);
+                SqlConnection con = new SqlConnection(DispTable.constr);
                 //con.ConnectionString = RefactoringTable.constr; //接続情報を入れる
                 con.Open();
 
@@ -181,8 +182,8 @@ namespace RefactoringTool
 
         private void button1_Click_1(object sender, EventArgs e)
         {
-            RecommendUI frm = new RecommendUI("社員");
-            frm.Show();
+            //RecommendUI frm = new RecommendUI("社員");
+            //frm.Show();
         }
     }
 }
