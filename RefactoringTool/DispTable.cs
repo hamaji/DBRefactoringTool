@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Npgsql;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
@@ -13,11 +14,21 @@ namespace RefactoringTool
 {
     public partial class DispTable : Form
     {
-        public static string constr = "Data Source=localhost;Initial Catalog=testDB;Integrated Security=True;Connection Timeout=30"; //接続情報を入れる;
+        //public static string constr = "Data Source=localhost;Initial Catalog=testDB;Integrated Security=True;Connection Timeout=30"; //接続情報を入れる;
+        public static string conn_str = "Server=localhost;Port=5432;User ID=postgres;Database=postgres;Password=2710;Enlist=true";
+
         private string tablename;
         public DispTable()
         {
             InitializeComponent();
+            using (NpgsqlConnection conn = new NpgsqlConnection(conn_str))
+            {
+                //PostgreSQLへ接続
+                conn.Open();
+                Console.WriteLine("Connection success!");
+                
+            }
+
         }
 
         private void btnMove_Click(object sender, EventArgs e)
@@ -34,20 +45,23 @@ namespace RefactoringTool
 
         private void DispTable_Load(object sender, EventArgs e)
         {
-            TreeNode treeNodeDummy = new TreeNode("Dummy");
+            TreeNode treeNodeDummy = new TreeNode("postgres");
             TreeNode[] treeInstance3 = { treeNodeDummy };
-            TreeNode treeNodeSQLEXPRESS = new TreeNode("SQLEXPRESS", treeInstance3);
+            TreeNode treeNodeSQLEXPRESS = new TreeNode("postgres", treeInstance3);
             TreeNode[] treeInstance = { treeNodeSQLEXPRESS };
-            TreeNode treeNodeHKHP = new TreeNode("HK-HP", treeInstance);
+            TreeNode treeNodeHKHP = new TreeNode("postgresSQL11", treeInstance);
             
 
             TreeNode[] treeDatabases = { treeNodeHKHP };
-            TreeNode treeDatabase = new TreeNode("データベース", treeDatabases);
+            TreeNode treeDatabase = new TreeNode("Servers", treeDatabases);
 
             //TreeNode treeNodeDrink = new TreeNode("HK-HP");
 
             TreeNode[] treeNodeRoot = { treeDatabase };
             treeView1.Nodes.AddRange(treeNodeRoot);
+
+            webTableList.Navigate("D:\\work\\RefGraph\\TablelistGraph.html");
+            //webBrowser2.Navigate("D:\\work\\RefGraph\\d3jsforceTablelist2.html");
 
         }
 
@@ -65,50 +79,27 @@ namespace RefactoringTool
         private void btnDispTable_Click(object sender, EventArgs e)
         {
             //スキーマ取得
-            System.Data.SqlClient.SqlConnection con
-            = new System.Data.SqlClient.SqlConnection();
-            con.ConnectionString = constr; //接続情報を入れる
-            con.Open();
+            //System.Data.SqlClient.SqlConnection con
+            //= new System.Data.SqlClient.SqlConnection();
+            //con.ConnectionString = constr; //接続情報を入れる
+            //con.Open();
 
 
-            DataTable dt = con.GetSchema("Tables");
+            //DataTable dt = con.GetSchema("Tables");
 
-            //foreach (DataRow row in dt.Rows)
+            using (NpgsqlConnection conn = new NpgsqlConnection(conn_str))
             {
-
-                //ListTable.DataSource = dt;
+                //PostgreSQLへ接続
+                conn.Open();
+                Console.WriteLine("Connection success!");
+                DataTable dt = conn.GetSchema("Tables");
             }
-
-
-            con.Close();
         }
 
         //private int counter = 0;
         private void treeView1_AfterSelect(object sender, TreeViewEventArgs e)
         {
-            //if (counter > 0)
-            //{
-            //    if (e.Node.Level == 2)
-            //    {
-            //        var st = e.Node.Text;
-            //        TreeNode treeNodeNew =
-            //          new TreeNode("追加" + counter.ToString());
-            //        //e.Node.Nodes.Add(treeNodeNew);
-
-            //        System.Data.SqlClient.SqlConnection con= new System.Data.SqlClient.SqlConnection();
-            //        con.ConnectionString = constr; //接続情報を入れる
-            //        con.Open();
-                    
-            //        DataTable dt = con.GetSchema("Tables");
-            //        string[] selectColumns = new string[] { "TABLE_NAME" };
-            //        DataTable selectTable = dt.DefaultView.ToTable("selectTable", false, selectColumns);
-            //        //dt.DefaultView()
-            //        //ListTable.DataSource = selectTable;
-                    
-            //        con.Close();
-            //    }
-            //}
-            //counter++;
+            
         }
 
         private void button1_Click(object sender, EventArgs e)
@@ -123,28 +114,27 @@ namespace RefactoringTool
             if (e.Node.Level == 3)
             {
                 tablename = e.Node.Text;
-                SqlConnection con = new SqlConnection(DispTable.constr);
-                //con.ConnectionString = RefactoringTable.constr; //接続情報を入れる
-                con.Open();
-                //クエリーの生成
-                SqlCommand sqlCom = new SqlCommand();
+                if (tablename == "Dummy") return;
 
-                //クエリー送信先及びトランザクションの指定
-                sqlCom.Connection = con;
-                //sqlCom.Transaction = this.sqlTran;
+                using (NpgsqlConnection conn = new NpgsqlConnection(conn_str))
+                {
+                    //PostgreSQLへ接続
+                    conn.Open();
+                    Console.WriteLine("Connection success!");
+                    DataTable dt = conn.GetSchema("Tables");
 
-                //クエリー文の指定
-                sqlCom.CommandText = "SELECT * FROM " + e.Node.Text +";";
+                    NpgsqlCommand cmd = new NpgsqlCommand();
+                    cmd.Connection = conn;
+                    cmd.CommandText = "SELECT * FROM " + e.Node.Text + ";";
+                    NpgsqlDataAdapter npgAda = new NpgsqlDataAdapter();
 
-                //データテーブルを作成するためのアダプタ
-                SqlDataAdapter sqlAda = new SqlDataAdapter();
-                sqlAda.SelectCommand = sqlCom;
-                DataTable ds = new DataTable();
-                sqlAda.Fill(ds);
+                    npgAda.SelectCommand = cmd;
+                    DataTable ds = new DataTable();
+                    npgAda.Fill(ds);
 
-                ListTable.DataSource = ds;
+                    ListTable.DataSource = ds;
+                }
 
-                con.Close();
             }
             
         }
@@ -156,26 +146,29 @@ namespace RefactoringTool
             {
                 var st = e.Node.Text;
 
-                //e.Node.Nodes.Add(treeNodeNew);
-
-                SqlConnection con = new SqlConnection(DispTable.constr);
-                //con.ConnectionString = RefactoringTable.constr; //接続情報を入れる
-                con.Open();
-
-                DataTable dt = con.GetSchema("Tables");
-                string[] selectColumns = new string[] { "TABLE_NAME" };
-                DataTable selectTable = dt.DefaultView.ToTable("selectTable", false, selectColumns);
-                DataRow[] datarows = selectTable.Select();
-                //dt.DefaultView()
-
-                foreach (DataRow datarow in datarows)
+                using (NpgsqlConnection conn = new NpgsqlConnection(conn_str))
                 {
-                    TreeNode treeNodeNew = new TreeNode(datarow.Field<string>("TABLE_NAME"));
-                    e.Node.Nodes.Add(treeNodeNew);
+                    //PostgreSQLへ接続
+                    conn.Open();
+                    Console.WriteLine("Connection success!");
+                    DataTable dt = conn.GetSchema("Tables");
+
+
+                    string[] selectColumns = new string[] { "TABLE_NAME" };
+                    DataTable selectTable = dt.DefaultView.ToTable("selectTable", false, selectColumns);
+                    DataRow[] datarows = selectTable.Select();
+
+                    //dt.DefaultView()
+
+                    foreach (DataRow datarow in datarows)
+                    {
+                        TreeNode treeNodeNew = new TreeNode(datarow.Field<string>("TABLE_NAME"));
+                        e.Node.Nodes.Add(treeNodeNew);
+                    }
                 }
                 //ListTable.DataSource = selectTable;
 
-                con.Close();
+                //con.Close();
             }
 
         }
@@ -184,6 +177,12 @@ namespace RefactoringTool
         {
             //RecommendUI frm = new RecommendUI("社員");
             //frm.Show();
+        }
+
+        private void Button1_Click_2(object sender, EventArgs e)
+        {
+            tebleworkspace frm = new tebleworkspace();
+            frm.Show();
         }
     }
 }

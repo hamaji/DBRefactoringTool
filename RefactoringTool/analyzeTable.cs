@@ -10,6 +10,7 @@ using System.Runtime.Serialization;
 using System.Runtime.Serialization.Json;
 using RDotNet;
 using System.Drawing;
+using Npgsql;
 
 namespace RefactoringTool
 {
@@ -20,6 +21,9 @@ namespace RefactoringTool
         private int colCnt;
         private List<string> colNsmeList;
         DataTable dsgrid2;
+
+        private List<tablelist> _tasks;
+
         public テーブル分析(string name)
         {
             tablename = name;
@@ -31,32 +35,51 @@ namespace RefactoringTool
         {
             lblTableName.Text = tablename;
 
-            //コネクション取得
-            SqlConnection con
-            = new SqlConnection(DispTable.constr);
-            con.Open();
+            using (NpgsqlConnection conn = new NpgsqlConnection(DispTable.conn_str))
+            {
+                conn.Open();
 
-            //スキーマ表示
-            dispTableSchema(con);
+                //スキーマ表示
+                dispTableSchema(conn);
 
-            dispTableColumn(con);
+                //dispTableColumn(conn);
 
-            dispColumn_Column(con);
+                //dispColumn_Column(conn);
 
-            //string[] row2 = new string[] { "0", "1" };
-            //dsgridbetCol.Rows.Add(row2);
-            //dsgridColdis.DataSource = dsgridbetCol;
 
-            //Nullclustering();
-            //dsgrid2 = new DataTable();
-            //dsgrid2.Columns.Add("移行Column", typeof(string));
-            //dsgrid2.Columns.Add("距離", typeof(string));
-            //dataGridView2.DataSource = dsgrid2;
+                //string[] row2 = new string[] { "0", "1" };
+                //dsgridbetCol.Rows.Add(row2);
+                //dsgridColdis.DataSource = dsgridbetCol;
 
-            webBrowser1.Navigate("D:\\work\\RefGraph\\d3jsforcetable_Colmun.html");
-            webBrowser2.Navigate("D:\\work\\RefGraph\\d3jsforcesColumn_Column.html");
-            webBrowser3.Navigate("D:\\work\\RefGraph\\d3jsforcetable_Colmun_Merge.html");
-            //webBrowser2.Navigate("D:\\work\\d3jsforce2.html");
+                //Nullclustering();
+                //dsgrid2 = new DataTable();
+                //dsgrid2.Columns.Add("移行Column", typeof(string));
+                //dsgrid2.Columns.Add("距離", typeof(string));
+                //dataGridView2.DataSource = dsgrid2;
+
+                webtableNameToColumn.Navigate("D:\\work\\RefGraph\\tableNameToColmun.html");
+                webColumnNameToColumn.Navigate("D:\\work\\RefGraph\\ColmunNameToColmun.html");
+                webtableColumnMerge.Navigate("D:\\work\\RefGraph\\ColmunTableMerge.html");
+
+                DataTable dt = conn.GetSchema("Tables");
+                string[] selectColumns = new string[] { "TABLE_NAME" };
+                DataTable selectTable = dt.DefaultView.ToTable("selectTable", false, selectColumns);
+                DataRow[] datarows = selectTable.Select();
+
+
+                foreach (DataRow datarow in datarows)
+                {
+                    _tasks = new List<tablelist>();
+
+                    string tablename = datarow.Field<string>("TABLE_NAME");
+                    dsTablelist.Rows.Add(false, tablename);
+
+                }
+                DataTable dt2 = conn.GetSchema("Columns");
+                //dgSchema.DataSource = dt2;
+
+            }
+
         }
 
 
@@ -117,32 +140,31 @@ namespace RefactoringTool
         private string Nullclustering()
         {
             //CSV作成
-            SqlConnection con
-            = new SqlConnection();
-            con.ConnectionString = DispTable.constr; //接続情報を入れる
-            con.Open();
-
-            //クエリーの生成
-            SqlCommand sqlCom = new SqlCommand();
-
-            //クエリー送信先及びトランザクションの指定
-            sqlCom.Connection = con;
-            //sqlCom.Transaction = this.sqlTran;
-            var str = "case " + colNsmeList[0] + " when null then 0 else 1 end AS " + colNsmeList[0];
-            //カラム作成
-            for (int k = 1; k < colCnt; k++)
+            using (NpgsqlConnection conn = new NpgsqlConnection(DispTable.conn_str))
             {
-                str += ",case when " + colNsmeList[k] + " is null then 0 else 1 end AS " + colNsmeList[k];
+                
+                //クエリーの生成
+                NpgsqlCommand sqlCom = new NpgsqlCommand();
+
+                //クエリー送信先及びトランザクションの指定
+                sqlCom.Connection = conn;
+                //sqlCom.Transaction = this.sqlTran;
+                var str = "case " + colNsmeList[0] + " when null then 0 else 1 end AS " + colNsmeList[0];
+                //カラム作成
+                for (int k = 1; k < colCnt; k++)
+                {
+                    str += ",case when " + colNsmeList[k] + " is null then 0 else 1 end AS " + colNsmeList[k];
+                }
+                //クエリー文の指定
+                sqlCom.CommandText = "SELECT " + str + " FROM " + tablename + ";";
+
+                //データテーブルを作成するためのアダプタ
+                NpgsqlDataAdapter sqlAda = new NpgsqlDataAdapter();
+                sqlAda.SelectCommand = sqlCom;
+
+                DataTable dsNull = new DataTable();
+                sqlAda.Fill(dsNull);
             }
-            //クエリー文の指定
-            sqlCom.CommandText = "SELECT " + str + " FROM " + tablename + ";";
-
-            //データテーブルを作成するためのアダプタ
-            SqlDataAdapter sqlAda = new SqlDataAdapter();
-            sqlAda.SelectCommand = sqlCom;
-
-            DataTable dsNull = new DataTable();
-            sqlAda.Fill(dsNull);
             //dataGridNULLCluster.DataSource = dsNull;
 
             //ConvertDataTableToCsv(dsNull, "c:/work/datasnull.csv", true);
@@ -340,10 +362,10 @@ namespace RefactoringTool
         }
 
 
-        private void dispTableSchema(SqlConnection con)
+        private void dispTableSchema(NpgsqlConnection con)
         {
             // データアダプタオブジェクトの作成
-            var adapter = new SqlDataAdapter("SELECT COLUMN_NAME ,  DATA_TYPE FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_NAME = '" + tablename + "' ORDER BY TABLE_NAME, ORDINAL_POSITION", con);
+            var adapter = new NpgsqlDataAdapter("SELECT COLUMN_NAME ,  DATA_TYPE FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_NAME = '" + tablename + "' ORDER BY TABLE_NAME, ORDINAL_POSITION", con);
 
             // データセットオブジェクトの作成
             var dsSchema = new DataSet();
@@ -352,14 +374,14 @@ namespace RefactoringTool
             adapter.Fill(dsSchema);
 
             // DataGridViewのデータソースにデータセットのテーブルをバインド
-            this.dgTableSchema.DataSource = dsSchema.Tables[0];
+            this.dgSchema.DataSource = dsSchema.Tables[0];
 
         }
 
-        private void dispTableColumn(SqlConnection con)
+        private void dispTableColumn(NpgsqlConnection con)
         {
             // データアダプタオブジェクトの作成
-            var adapter = new SqlDataAdapter("SELECT *  FROM テーブルカラム名距離", con);
+            var adapter = new NpgsqlDataAdapter("SELECT *  FROM テーブルカラム名距離", con);
 
             // データセットオブジェクトの作成
             var dsSchema = new DataSet();
@@ -372,10 +394,10 @@ namespace RefactoringTool
 
         }
 
-        private void dispColumn_Column(SqlConnection con)
+        private void dispColumn_Column(NpgsqlConnection con)
         {
             // データアダプタオブジェクトの作成
-            var adapter = new SqlDataAdapter("SELECT *  FROM カラム間距離", con);
+            var adapter = new NpgsqlDataAdapter("SELECT *  FROM カラム間距離", con);
 
             // データセットオブジェクトの作成
             var dsSchema = new DataSet();
@@ -391,6 +413,20 @@ namespace RefactoringTool
         private void btnInit_Click(object sender, EventArgs e)
         {
 
+        }
+
+        public class tablelist
+        {
+            public bool 選択 { get; set; }
+
+            public string テーブル名 { get; set; }
+
+        }
+
+        private void Btnhikaku_Click(object sender, EventArgs e)
+        {
+            compareform frm = new compareform();
+            frm.Show();
         }
     }
 }
